@@ -8,12 +8,14 @@
 class Worker {
 public:
   Worker(int const &id) : m_id(id){};
-  Worker(ConcurrentQueue<int> *q, int const &id) : m_q(q), m_id(id){};
-  void subscribe(ConcurrentQueue<int> *q);
+  Worker(ConcurrentQueue<int> *a_in_queue, ConcurrentQueue<int> *a_out_queue,
+         int const &id)
+      : in_queue(a_in_queue), out_queue(a_out_queue), m_id(id){};
   void operator()();
 
 private:
-  ConcurrentQueue<int> *m_q;
+  ConcurrentQueue<int> *in_queue;
+  ConcurrentQueue<int> *out_queue;
   int m_id;
 };
 

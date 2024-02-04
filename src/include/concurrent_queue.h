@@ -3,6 +3,7 @@
 #define CONCURRENT_QUEUE_H_
 
 #include <condition_variable>
+#include <expected>
 #include <iostream>
 #include <mutex>
 #include <queue>
@@ -10,34 +11,31 @@
 
 template <typename T> class ConcurrentQueue {
 public:
-  T pop() {
+  std::expected<T, std::string> pop() {
     std::unique_lock<std::mutex> mlock(mutex_);
-    while (queue_.empty()) {
-      std::cout << "queue is empty, waiting..." << std::endl;
-      cond_.wait(mlock);
-    }
-    auto val = queue_.front();
-    queue_.pop();
-    mlock.unlock();
-    cond_.notify_one();
-    return val;
-  }
+    cond_.wait(mlock, [this] { return is_shutdown_ || !queue_.empty(); });
 
-  void pop(T &item) {
-    std::unique_lock<std::mutex> mlock(mutex_);
-    while (queue_.empty()) {
-      cond_.wait(mlock);
+    if (!is_shutdown_) {
+      auto val = queue_.front();
+      queue_.pop();
+      mlock.unlock();
+      cond_.notify_one();
+      return val;
     }
-    item = queue_.front();
-    queue_.pop();
-    mlock.unlock();
-    cond_.notify_one();
+
+    return std::unexpected{"Queue has shut down."};
   }
 
   void push(const T &item) {
     std::unique_lock<std::mutex> mlock(mutex_);
     queue_.push(item);
     mlock.unlock();
+    cond_.notify_one();
+  }
+
+  void shutdown() {
+    is_shutdown_ = true;
+    std::cout << "shutting down" << std::endl;
     cond_.notify_one();
   }
   ConcurrentQueue() = default;
@@ -49,7 +47,7 @@ private:
   std::queue<T> queue_;
   std::mutex mutex_;
   std::condition_variable cond_;
-  const static unsigned int BUFFER_SIZE = 10;
+  bool is_shutdown_ = false;
 };
 
 #endif

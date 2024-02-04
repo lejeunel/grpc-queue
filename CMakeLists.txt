@@ -16,3 +16,4 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
 
 add_subdirectory(src)
+add_subdirectory(tests EXCLUDE_FROM_ALL)

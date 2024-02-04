@@ -1,5 +1,4 @@
 add_library(ccq
-    concurrent_queue.cpp
     worker.cpp
     app.cpp
 )
