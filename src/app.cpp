@@ -2,17 +2,18 @@
 
 void App::run(int const &n_items) {
 
-  std::cout << "app pushing tasks in queue" << std::endl;
+  std::cout << "app pushing tasks in queue\n";
   for (int i = 0; i < n_items; ++i) {
-    std::cout << "Pushing " << i << "\n";
-    m_q->push(i);
+    in_queue->push(i);
   }
+}
 
-  std::cout << "app spawning worker thread" << std::endl;
-  std::thread worker_thread(*m_worker);
-  std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-  m_q->push(999);
+void App::stop() {
+  std::cout << "stopping app\n";
 
-  m_q->shutdown();
+  in_queue->close();
+
   worker_thread.join();
+  out_queue->close();
+  db_writer_thread.join();
 }

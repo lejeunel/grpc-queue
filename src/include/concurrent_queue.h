@@ -13,14 +13,20 @@ template <typename T> class ConcurrentQueue {
 public:
   std::expected<T, std::string> pop() {
     std::unique_lock<std::mutex> mlock(mutex_);
-    cond_.wait(mlock, [this] { return is_shutdown_ || !queue_.empty(); });
+    cond_.wait(mlock, [this] {
+      return is_shutdown_ || (!queue_.empty() || is_done_);
+    });
 
-    if (!is_shutdown_) {
+    if (!is_shutdown_ && !queue_.empty()) {
       auto val = queue_.front();
       queue_.pop();
       mlock.unlock();
       cond_.notify_one();
       return val;
+    }
+
+    if (queue_.empty() && is_done_) {
+      return std::unexpected{"Queue is empty and done."};
     }
 
     return std::unexpected{"Queue has shut down."};
@@ -35,9 +41,14 @@ public:
 
   void shutdown() {
     is_shutdown_ = true;
-    std::cout << "shutting down" << std::endl;
     cond_.notify_one();
   }
+
+  void close() {
+    is_done_ = true;
+    cond_.notify_one();
+  }
+
   ConcurrentQueue() = default;
   ConcurrentQueue(const ConcurrentQueue &) = delete; // disable copying
   ConcurrentQueue &
@@ -48,6 +59,7 @@ private:
   std::mutex mutex_;
   std::condition_variable cond_;
   bool is_shutdown_ = false;
+  bool is_done_ = false;
 };
 
 #endif
