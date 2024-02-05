@@ -7,13 +7,13 @@
 
 class DBWriter {
 public:
-  DBWriter(ConcurrentQueue<int> *a_queue, SQLite::Database *a_db)
-      : queue(a_queue), db(a_db){};
+  DBWriter(SQLite::Database &a_db) : db(a_db){};
   void operator()();
+  void set_in_queue(ConcurrentQueue<int> *q) { queue = q; }
 
 private:
   ConcurrentQueue<int> *queue;
-  SQLite::Database *db;
+  SQLite::Database &db;
 };
 
 #endif // DB_WRITER_H_

@@ -7,13 +7,13 @@
 
 class Worker {
 public:
-  Worker(ConcurrentQueue<int> *a_in_queue, ConcurrentQueue<int> *a_out_queue)
-      : in_queue(a_in_queue), out_queue(a_out_queue){};
   void operator()();
+  void set_in_queue(ConcurrentQueue<int> *q) { in_queue = q; }
+  void set_out_queue(ConcurrentQueue<int> *q) { out_queue = q; }
 
 private:
-  ConcurrentQueue<int> *in_queue;
-  ConcurrentQueue<int> *out_queue;
+  ConcurrentQueue<int> *in_queue = nullptr;
+  ConcurrentQueue<int> *out_queue = nullptr;
 };
 
 #endif // WORKER_H_

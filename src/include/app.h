@@ -8,23 +8,22 @@
 
 class App {
 public:
-  App(std::unique_ptr<Worker> a_worker, std::unique_ptr<DBWriter> a_db_writer,
-      std::unique_ptr<ConcurrentQueue<int>> a_in_queue,
-      std::unique_ptr<ConcurrentQueue<int>> a_out_queue,
-      std::unique_ptr<SQLite::Database> a_db)
-      : worker_thread(*std::move(a_worker)),
-        db_writer_thread(*std::move(a_db_writer)),
-        in_queue(std::move(a_in_queue)), out_queue(std::move(a_out_queue)),
-        db(std::move(a_db)){};
+  App(Worker worker, DBWriter db_writer) {
+    worker.set_in_queue(&in_queue);
+    worker.set_out_queue(&out_queue);
+    db_writer.set_in_queue(&out_queue);
+
+    worker_thread = std::thread(worker);
+    db_writer_thread = std::thread(db_writer);
+  }
   void run(int const &);
   void stop();
 
 private:
   std::thread worker_thread;
   std::thread db_writer_thread;
-  std::unique_ptr<ConcurrentQueue<int>> in_queue;
-  std::unique_ptr<ConcurrentQueue<int>> out_queue;
-  std::unique_ptr<SQLite::Database> db;
+  ConcurrentQueue<int> in_queue;
+  ConcurrentQueue<int> out_queue;
 };
 
 #endif // APP_H_
