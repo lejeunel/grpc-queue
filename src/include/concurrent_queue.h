@@ -26,7 +26,7 @@ public:
     }
 
     if (queue_.empty() && is_done_) {
-      return std::unexpected{"Queue is empty and done."};
+      return std::unexpected{"Queue is empty and marked as done."};
     }
 
     return std::unexpected{"Queue has shut down."};

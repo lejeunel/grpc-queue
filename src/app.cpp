@@ -4,7 +4,7 @@ void App::run(int const &n_items) {
 
   std::cout << "app pushing tasks in queue\n";
   for (int i = 0; i < n_items; ++i) {
-    in_queue.push(i);
+    in_queue.push(Task{});
   }
   std::cout << "done.\n";
 }

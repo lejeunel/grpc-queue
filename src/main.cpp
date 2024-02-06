@@ -1,26 +1,21 @@
 #include "include/app.h"
 #include "include/concurrent_queue.h"
+#include "include/database.h"
 #include "include/db_writer.h"
 #include "include/worker.h"
-#include <SQLiteCpp/SQLiteCpp.h>
 #include <functional>
 #include <iostream>
 #include <memory>
 #include <thread>
 
-App make_app(std::string const &db_path) {
-  auto db =
-      SQLite::Database(db_path, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
-  std::cout << "SQLite database file '" << db.getFilename().c_str()
-            << "' opened successfully\n";
-
-  return App(Worker(), DBWriter(db));
+App make_test_app(Config const &cfg) {
+  return App(std::make_unique<InMemoryDBCreator>());
 }
 
 int main() {
-  auto app = make_app(":memory:");
+  auto app = make_test_app(Config{});
   app.run(500);
-  app.stop();
 
+  app.stop();
   return 0;
 }

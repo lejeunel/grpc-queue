@@ -2,6 +2,7 @@ add_library(ccq
     worker.cpp
     db_writer.cpp
     app.cpp
+    database.cpp
 )
 
 add_executable(main

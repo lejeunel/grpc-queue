@@ -3,13 +3,12 @@
 void DBWriter::operator()() {
   std::cout << "db writer starting\n";
   while (true) {
-    auto item = queue->pop();
-    if (item) {
-      std::cout << "DBWriter "
-                << " popped " << item.value() << std::endl;
+    auto task = queue->pop();
+    if (task) {
+      std::cout << "DBWriter: popped " << task.value().id << '\n';
+      db->save_task(task);
     } else {
-      std::cout << "DBWriter got: " << item.error() << ". Quitting."
-                << std::endl;
+      std::cout << "DBWriter got: " << task.error() << '\n';
       ;
       break;
     }

@@ -1,19 +1,20 @@
 #ifndef DB_WRITER_H_
 #define DB_WRITER_H_
 #include "concurrent_queue.h"
-#include <SQLiteCpp/SQLiteCpp.h>
+#include "database.h"
+#include "models.h"
 #include <iostream>
 #include <string>
 
 class DBWriter {
 public:
-  DBWriter(SQLite::Database &a_db) : db(a_db){};
+  DBWriter(IDBConn *a_db) : db(a_db){};
   void operator()();
-  void set_in_queue(ConcurrentQueue<int> *q) { queue = q; }
+  void set_in_queue(ConcurrentQueue<Task> *q) { queue = q; }
 
 private:
-  ConcurrentQueue<int> *queue;
-  SQLite::Database &db;
+  ConcurrentQueue<Task> *queue;
+  IDBConn *db;
 };
 
 #endif // DB_WRITER_H_
