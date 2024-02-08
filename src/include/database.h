@@ -1,7 +1,6 @@
 #ifndef DATABASE_H_
 #define DATABASE_H_
 #include "models.h"
-#include <SQLiteCpp/SQLiteCpp.h>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -12,38 +11,21 @@ struct Config {
   std::string db_path;
 };
 
-class IDBConn {
+class IDBSession {
 public:
-  virtual ~IDBConn() {}
+  virtual ~IDBSession() {}
   virtual void save_task(Task const &) = 0;
+  virtual void init_tables() = 0;
+  virtual int get_n_tasks() = 0;
 };
 
-class LocalDatabase : public IDBConn {
+class DBSessionCreator {
 public:
-  LocalDatabase(std::string const &db_path, const int &flags)
-      : db(db_path, flags) {}
-  void save_task(Task const &t) { std::cout << "saving task " << t.id << '\n'; }
-
-private:
-  SQLite::Database db;
-};
-
-class DBCreator {
-public:
-  virtual std::unique_ptr<IDBConn> connection_factory_method() = 0;
-  std::unique_ptr<IDBConn> create() {
-    auto conn = this->connection_factory_method();
-    return conn;
+  virtual std::unique_ptr<IDBSession> session_factory() = 0;
+  std::unique_ptr<IDBSession> create() {
+    auto s = this->session_factory();
+    return s;
   }
-};
-
-class InMemoryDBCreator : public DBCreator {
-
-public:
-  std::unique_ptr<IDBConn> connection_factory_method() {
-    auto flags = SQLite::OPEN_CREATE | SQLite::OPEN_READWRITE;
-    return std::make_unique<LocalDatabase>(":memory:", flags);
-  };
 };
 
 #endif // DATABASE_H_

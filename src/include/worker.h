@@ -2,18 +2,20 @@
 #define WORKER_H_
 
 #include "concurrent_queue.h"
+#include "easylogging++.h"
+#include "models.h"
 #include <iostream>
 #include <string>
 
 class Worker {
 public:
   void operator()();
-  void set_in_queue(ConcurrentQueue<int> *q) { in_queue = q; }
-  void set_out_queue(ConcurrentQueue<int> *q) { out_queue = q; }
+  void set_in_queue(ConcurrentQueue<Task> &q) { in_queue = &q; }
+  void set_out_queue(ConcurrentQueue<Task> &q) { out_queue = &q; }
 
 private:
-  ConcurrentQueue<int> *in_queue = nullptr;
-  ConcurrentQueue<int> *out_queue = nullptr;
+  ConcurrentQueue<Task> *in_queue = nullptr;
+  ConcurrentQueue<Task> *out_queue = nullptr;
 };
 
 #endif // WORKER_H_

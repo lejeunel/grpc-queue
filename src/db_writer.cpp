@@ -1,14 +1,13 @@
 #include "include/db_writer.h"
 
 void DBWriter::operator()() {
-  std::cout << "db writer starting\n";
   while (true) {
     auto task = queue->pop();
     if (task) {
-      std::cout << "DBWriter: popped " << task.value().id << '\n';
-      db->save_task(task);
+      LOG(DEBUG) << "DBWriter saving task: " << task.value().id;
+      db->save_task(task.value());
     } else {
-      std::cout << "DBWriter got: " << task.error() << '\n';
+      LOG(DEBUG) << "DBWriter got: " << task.error();
       ;
       break;
     }

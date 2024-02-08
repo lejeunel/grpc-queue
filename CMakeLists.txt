@@ -10,9 +10,18 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic-errors -std=c++0x -pthread")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -std=c++0x -pthread")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
+include(FetchContent)
+FetchContent_Declare(
+  gRPC
+  GIT_REPOSITORY https://github.com/grpc/grpc
+  GIT_TAG        v1.54.0  # e.g v1.28.0
+)
+set(FETCHCONTENT_QUIET OFF)
+FetchContent_MakeAvailable(gRPC)
 
 
 add_subdirectory(src)
