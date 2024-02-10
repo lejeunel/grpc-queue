@@ -5,6 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <grpcpp/create_channel.h>
 #include <grpcpp/server.h>
+#include <grpcpp/server_builder.h>
 #include <memory>
 
 using app::AppServer;

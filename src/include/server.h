@@ -4,9 +4,7 @@
 #include "app_server.grpc.pb.h"
 #include "database.h"
 #include <grpc/grpc.h>
-#include <grpcpp/security/server_credentials.h>
 #include <grpcpp/server.h>
-#include <grpcpp/server_builder.h>
 #include <grpcpp/server_context.h>
 #include <iostream>
 
