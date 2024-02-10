@@ -2,9 +2,9 @@
 #define LOCAL_DATABASE_H_
 #include "database.h"
 #include "easylogging++.h"
+#include "soci/soci.h"
+#include "soci/sqlite3/soci-sqlite3.h"
 #include "utils.h"
-#include <soci/soci.h>
-#include <soci/sqlite3/soci-sqlite3.h>
 
 class LocalDBSession : public IDBSession {
 public:

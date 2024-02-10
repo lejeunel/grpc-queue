@@ -1,1 +1,29 @@
 #+title: Task queue using gRPC
+
+* Preliminaries
+
+Generate a conan profile if necessary:
+
+#+begin_src sh
+conan profile detect --force
+#+end_src
+
+Pull dependencies and generate compilation scripts
+#+begin_src sh
+conan install . --output-folder=build --build=missing
+#+end_src
+
+* Compiling
+
+Main script:
+
+#+begin_src sh
+cmake --build . -j <n-jobs> --target main
+#+end_src
+
+* Testing
+
+#+begin_src sh
+cmake --build . -j <n-jobs> --target tests
+./tests/tests
+#+end_src

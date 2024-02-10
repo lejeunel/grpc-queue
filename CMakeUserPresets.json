@@ -1,0 +1,9 @@
+{
+    "version": 4,
+    "vendor": {
+        "conan": {}
+    },
+    "include": [
+        "/home/laurent/Documents/producer_consumer_2/build/CMakePresets.json"
+    ]
+}

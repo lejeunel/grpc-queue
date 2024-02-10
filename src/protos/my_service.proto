@@ -14,10 +14,10 @@
 
 syntax = "proto3";
 
-package app;
+package myservice;
 
 // Interface exported by the server.
-service AppServer {
+service MyService {
   // A simple RPC.
   //
   // Push a task to process

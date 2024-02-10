@@ -1,22 +1,23 @@
 #ifndef SERVER_H_
 #define SERVER_H_
 #include "app.h"
-#include "app_server.grpc.pb.h"
 #include "database.h"
+#include "my_service.grpc.pb.h"
 #include <grpc/grpc.h>
 #include <grpcpp/server.h>
 #include <grpcpp/server_context.h>
 #include <iostream>
 
-using app::TaskSchema;
 using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::ServerReader;
 using grpc::ServerWriter;
 using grpc::Status;
+using myservice::MyService;
+using myservice::TaskSchema;
 
-class ServerImpl final : public ::app::AppServer::Service {
+class ServerImpl final : public MyService::Service {
 public:
   ServerImpl(std::unique_ptr<App> a_app) : m_app(std::move(a_app)){};
   Status PushTask(ServerContext *context, const TaskSchema *request,

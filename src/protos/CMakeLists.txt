@@ -30,14 +30,14 @@ set(_GRPC_GRPCPP grpc++)
 set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:grpc_cpp_plugin>)
 
 # Proto file
-get_filename_component(rg_proto "app_server.proto" ABSOLUTE)
+get_filename_component(rg_proto "my_service.proto" ABSOLUTE)
 get_filename_component(rg_proto_path "${rg_proto}" PATH)
 
 # Generated sources
-set(rg_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/app_server.pb.cc")
-set(rg_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/app_server.pb.h")
-set(rg_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/app_server.grpc.pb.cc")
-set(rg_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/app_server.grpc.pb.h")
+set(rg_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/my_service.pb.cc")
+set(rg_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/my_service.pb.h")
+set(rg_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/my_service.grpc.pb.cc")
+set(rg_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/my_service.grpc.pb.h")
 add_custom_command(
       OUTPUT "${rg_proto_srcs}" "${rg_proto_hdrs}" "${rg_grpc_srcs}" "${rg_grpc_hdrs}"
       COMMAND ${_PROTOBUF_PROTOC}
