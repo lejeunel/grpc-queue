@@ -15,11 +15,14 @@ option(WITH_SQLITE3 "" ON)
 
 set(SOCIDIR ${CMAKE_CURRENT_LIST_DIR}/thirdparty/soci)
 add_subdirectory(${SOCIDIR})
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/protos)
 
-# Needed so that SOCI can find the file soci/soci-config.h
 target_include_directories(ccq
     PUBLIC
-        ${SOCIDIR}/include)
+        ${SOCIDIR}/include
+        ${CMAKE_BINARY_DIR}/src/protos
+      )
 
-target_link_libraries(ccq PUBLIC soci_core soci_sqlite3 grpc++)
+
+target_link_libraries(ccq PUBLIC soci_core soci_sqlite3 rg_grpc_proto)
 target_link_libraries(main ccq)

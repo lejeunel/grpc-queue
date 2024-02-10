@@ -4,14 +4,14 @@
 #include "uuid.h"
 #include <string>
 
-struct Task {
-  std::string id;
-  int field;
+enum class TaskStatus { pending, done };
 
-  Task(const int &a_field) {
-    id = uuid::v4::UUID::New().String();
-    field = a_field;
-  }
+struct Task {
+  std::string id = uuid::v4::UUID::New().String();
+  int field;
+  TaskStatus status = TaskStatus::pending;
+
+  Task(const int &a_field) { field = a_field; }
 };
 
 #endif // MODELS_H_

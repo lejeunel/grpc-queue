@@ -15,4 +15,4 @@ add_executable(tests
 ../src/logger.cpp
 )
 
-target_link_libraries(tests PUBLIC Catch2::Catch2 ccq)
+target_link_libraries(tests PUBLIC Catch2::Catch2 ccq rg_grpc_proto)
